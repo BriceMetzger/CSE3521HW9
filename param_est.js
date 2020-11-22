@@ -39,8 +39,8 @@ function calc_linLSQ_line(data) {
     * Refer to slide 11 (and 10)
     ***********************/
 
-    A[i][0]=x[i];
-    A[i][1]=1;
+    A[i][0]=1;
+    A[i][1]=x[i];
     b[i]=y[i];
   }
 
@@ -50,16 +50,13 @@ function calc_linLSQ_line(data) {
   let p = numeric.inv(numeric.dot(numeric.transpose(A), A))
   p = numeric.dot(p, numeric.transpose(A))
   p = numeric.dot(p , b)
-  //flipping the parameters around because this makes the line pretty
-  let test = [p[1], p[0]]
-  p = test
 
   let sse=0;
   for(let i=0;i<N;++i) {
     let model_out=eval_line_func(x[i],p); //The output of the model function on data point i using
                                           //parameters p
     let pHat = model_out
-    pHat = pHat * pHat
+    pHat = (pHat * pHat)
     sse += pHat
   }
   helper_log_write("SSE="+sse);
@@ -80,6 +77,7 @@ function calc_linLSQ_poly(data,order) {
   
   let A=numeric.rep([N,order+1],0);
   let b=numeric.rep([N],0);
+
   for(let i=0;i<N;++i) {
 		/***********************
     * TASK: Fill in A and b
@@ -94,6 +92,14 @@ function calc_linLSQ_poly(data,order) {
     //...
     //A[i][order]=??;
     //b[i]=??;
+
+    A[i][0]=1;
+    xVal = x[i]
+    for(let j = 1; j<=order; ++j){
+      A[i][j] = xVal
+      xVal = xVal * x[i]
+    }
+    b[i]=y[i];
   }
   
   /***********************
@@ -102,6 +108,20 @@ function calc_linLSQ_poly(data,order) {
   * Re-use the code from your calc_linLSQ_line(), this part should be identical
   *  EXCEPT use instead the provided eval_poly_func(x,p) instead of eval_line_func
   */
+
+ let p = numeric.inv(numeric.dot(numeric.transpose(A), A))
+ p = numeric.dot(p, numeric.transpose(A))
+ p = numeric.dot(p , b)
+
+ let sse=0;
+ for(let i=0;i<N;++i) {
+   let model_out=eval_poly_func(x[i],p); //The output of the model function on data point i using
+                                         //parameters p
+   let pHat = model_out
+   pHat = (pHat * pHat)
+   sse += pHat
+ }
+ helper_log_write("SSE="+sse);
 
   return p;
 }
