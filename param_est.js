@@ -34,34 +34,33 @@ function calc_linLSQ_line(data) {
   let A=numeric.rep([N,2],0); //Make an empty (all zero) Nx2 matrix
   let b=numeric.rep([N],0); //Make an empty N element vector
   for(let i=0;i<N;++i) {
+
     /***********************
-    * TASK: Fill in A and b
-    *
     * Refer to slide 11 (and 10)
-    *
-    * Hint: BE CAREFUL of the order, what do the columns of A refer and relate to?
     ***********************/
 
-    A[i][0]=??;
-    A[i][1]=??;
-    b[i]=??;
+    A[i][0]=x[i];
+    A[i][1]=1;
+    b[i]=y[i];
   }
 
   /***********************
-  * TASK: Solve for parameters
-  *
   * Refer to slides 18-19
   ***********************/
-  let p=??;
-  
+  let p = numeric.inv(numeric.dot(numeric.transpose(A), A))
+  p = numeric.dot(p, numeric.transpose(A))
+  p = numeric.dot(p , b)
+  //flipping the parameters around because this makes the line pretty
+  let test = [p[1], p[0]]
+  p = test
+
   let sse=0;
   for(let i=0;i<N;++i) {
     let model_out=eval_line_func(x[i],p); //The output of the model function on data point i using
                                           //parameters p
-
-    /***********************
-    * TASK: Calculate the sum of squared error
-    ***********************/
+    let pHat = model_out
+    pHat = pHat * pHat
+    sse += pHat
   }
   helper_log_write("SSE="+sse);
     
