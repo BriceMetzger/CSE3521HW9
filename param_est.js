@@ -132,7 +132,7 @@ function calc_jacobian(data,p) {
     J[i][1] = x[i];
 
     // Partial Derivative with respect to p[2] = b
-    J[i][2] = Math.pow(x[i], p[2]) * Math.log(x[i]);
+    J[i][2] = p[3] * Math.pow(x[i], p[2]) * Math.log(x[i]);
 
     // Partial Derivative with respect to p[3] = a
     J[i][3] = Math.pow(x[i], p[2]);
